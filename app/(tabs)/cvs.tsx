@@ -60,7 +60,7 @@ export default function MyCvsScreen() {
               <Text style={styles.emptySub}>Create your first structured CV to manage it here.</Text>
             </View>
           }
-          renderItem={({ item }) => (
+          renderItem={({ item }: { item: any }) => (
             <View style={styles.card}>
               <View style={styles.cardHeader}>
                 <Text style={styles.title}>{item.title}</Text>

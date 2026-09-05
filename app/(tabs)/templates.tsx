@@ -51,7 +51,7 @@ export default function TemplatesScreen() {
           data={templateList}
           keyExtractor={item => item.id}
           contentContainerStyle={{ paddingBottom: 20 }}
-          renderItem={({ item }) => (
+          renderItem={({ item }: { item: any }) => (
             <View style={styles.card}>
               <Image source={{ uri: item.previewImageUrl || 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&q=80' }} style={styles.previewImage} />
 
