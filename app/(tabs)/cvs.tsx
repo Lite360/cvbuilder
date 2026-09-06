@@ -52,7 +52,7 @@ export default function MyCvsScreen() {
       ) : (
         <FlatList
           data={cvList}
-          keyExtractor={item => item.id}
+          keyExtractor={(item: any) => item.id}
           contentContainerStyle={{ padding: 16 }}
           ListEmptyComponent={
             <View style={styles.emptyCard}>

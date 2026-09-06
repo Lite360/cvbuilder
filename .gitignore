@@ -105,3 +105,9 @@ temp/
 *.cer
 secret*
 credentials*
+
+# Helper & local files
+populate_modules.js
+sync_staging.js
+pnpm-lock.yaml
+pnpm-workspace.yaml
