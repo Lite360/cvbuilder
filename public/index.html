@@ -391,19 +391,25 @@
   </div>
 
   <script>
-    async function testApi() {
+    async function testApi(endpoint = '/api') {
       const out = document.getElementById('api-output');
       const btn = document.getElementById('run-test-btn');
       btn.textContent = 'Pinging...';
-      out.textContent = '// Requesting /api ...';
+      out.textContent = `// Requesting ${endpoint} ...`;
       const start = performance.now();
       try {
-        const res = await fetch('/api');
-        const data = await res.json();
+        const res = await fetch(endpoint);
         const duration = Math.round(performance.now() - start);
-        out.textContent = `// Response (HTTP ${res.status}, ${duration}ms):\n` + JSON.stringify(data, null, 2);
+        const text = await res.text();
+        try {
+          const data = JSON.parse(text);
+          out.textContent = `// Response from ${endpoint} (HTTP ${res.status}, ${duration}ms):\n` + JSON.stringify(data, null, 2);
+          document.getElementById('api-status-text').textContent = res.ok ? 'API Online' : 'API Error';
+        } catch {
+          out.textContent = `// Response from ${endpoint} (HTTP ${res.status}, ${duration}ms):\n` + text;
+        }
       } catch (err) {
-        out.textContent = '// Error connecting to /api: ' + err.message;
+        out.textContent = `// Network Error connecting to ${endpoint}:\n` + err.message;
       } finally {
         btn.textContent = 'Ping /api';
       }
@@ -411,7 +417,7 @@
 
     // Run automatically on initial load
     window.addEventListener('DOMContentLoaded', () => {
-      testApi();
+      testApi('/api');
     });
   </script>
 </body>
