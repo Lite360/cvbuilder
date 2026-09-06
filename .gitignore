@@ -108,6 +108,9 @@ credentials*
 
 # Helper & local files
 populate_modules.js
+populate_all.js
 sync_staging.js
+patch_externals.js
+sync_neon.js
 pnpm-lock.yaml
 pnpm-workspace.yaml
