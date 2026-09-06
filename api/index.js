@@ -1,5 +1,4 @@
-export default async function handler(req: any, res: any) {
-  // Set CORS headers
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -9,9 +8,6 @@ export default async function handler(req: any, res: any) {
   );
 
   if (req.method === 'OPTIONS') {
-    if (typeof res.status === 'function') {
-      return res.status(200).end();
-    }
     res.statusCode = 200;
     return res.end();
   }
@@ -56,4 +52,4 @@ export default async function handler(req: any, res: any) {
   res.setHeader('Content-Type', 'application/json');
   res.statusCode = 200;
   return res.end(JSON.stringify(payload));
-}
+};
