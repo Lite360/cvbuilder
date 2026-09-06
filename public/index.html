@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Builder | API & Platform Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(18, 24, 38, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.3);
+      --accent: #6366f1;
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.25);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient glow backgrounds */
+    .glow-1 {
+      position: absolute;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.08) 50%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-2 {
+      position: absolute;
+      bottom: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 48px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #fff;
+      box-shadow: 0 8px 24px var(--primary-glow);
+    }
+
+    .brand-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      backdrop-filter: blur(12px);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    /* Hero section */
+    .hero {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 56px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: #60a5fa;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero h2 {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Grid layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(16px);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .code-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: #93c5fd;
+    }
+
+    /* Live Tester Box */
+    .live-box {
+      background: #060911;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 56px;
+    }
+
+    .live-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: gap;
+    }
+
+    .live-box-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .test-btn {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .test-btn:hover {
+      background: #1d4ed8;
+    }
+
+    pre {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #e2e8f0;
+      overflow-x: auto;
+      max-height: 220px;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 32px 0 20px;
+      border-top: 1px solid var(--card-border);
+      color: var(--text-sub);
+      font-size: 13px;
+    }
+
+    @media (max-width: 640px) {
+      .hero h2 { font-size: 28px; }
+      header { flex-direction: column; gap: 16px; align-items: flex-start; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo-badge">CV</div>
+        <div class="brand-text">
+          <h1>CV Builder Platform</h1>
+          <p>Serverless Cloud API & Mobile Backend</p>
+        </div>
+      </div>
+      <div class="status-pill">
+        <span class="pulse-dot"></span>
+        <span id="api-status-text">API Online</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="tag">⚡ Powered by Vercel Serverless & Neon DB</div>
+      <h2>Intelligent CV Builder Backend</h2>
+      <p>High-performance backend API powering seamless resume creation, automated PDF compilation, Vercel Blob cloud storage, and AI enhancement.</p>
+    </section>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-icon">🔐</div>
+        <h3>Authentication</h3>
+        <p>JWT-secured account registration, login verification, and profile management.</p>
+        <span class="code-badge">POST /api/auth/login</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📄</div>
+        <h3>CV Management</h3>
+        <p>Full CRUD lifecycle for resumes, work history, skill tags, and custom styling.</p>
+        <span class="code-badge">GET /api/cvs</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🎨</div>
+        <h3>Resume Templates</h3>
+        <p>Pre-designed modern, executive, and minimal templates ready for compilation.</p>
+        <span class="code-badge">GET /api/templates</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <h3>AI Assistant</h3>
+        <p>Automated summary generation, job description tailoring, and bullet enhancement.</p>
+        <span class="code-badge">POST /api/ai/enhance</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">💾</div>
+        <h3>PDF & Blob Storage</h3>
+        <p>Instant PDF compilation uploaded directly to Vercel Blob cloud store.</p>
+        <span class="code-badge">POST /api/pdf/generate</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">💳</div>
+        <h3>Payments & Pro Tier</h3>
+        <p>Webhook-verified subscriptions and premium template unlocks.</p>
+        <span class="code-badge">POST /api/payments</span>
+      </div>
+    </div>
+
+    <div class="live-box">
+      <div class="live-box-header">
+        <h3><span>⚡</span> Live API Test Console</h3>
+        <button class="test-btn" id="run-test-btn" onclick="testApi()">Ping /api</button>
+      </div>
+      <pre id="api-output">// Click "Ping /api" to execute live health check...</pre>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 CV Builder Platform • All systems operational</p>
+    </footer>
+  </div>
+
+  <script>
+    async function testApi() {
+      const out = document.getElementById('api-output');
+      const btn = document.getElementById('run-test-btn');
+      btn.textContent = 'Pinging...';
+      out.textContent = '// Requesting /api ...';
+      const start = performance.now();
+      try {
+        const res = await fetch('/api');
+        const data = await res.json();
+        const duration = Math.round(performance.now() - start);
+        out.textContent = `// Response (HTTP ${res.status}, ${duration}ms):\n` + JSON.stringify(data, null, 2);
+      } catch (err) {
+        out.textContent = '// Error connecting to /api: ' + err.message;
+      } finally {
+        btn.textContent = 'Ping /api';
+      }
+    }
+
+    // Run automatically on initial load
+    window.addEventListener('DOMContentLoaded', () => {
+      testApi();
+    });
+  </script>
+</body>
+</html>
