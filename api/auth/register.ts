@@ -1,4 +1,3 @@
-import type { Request, Response } from 'express';
 import { db } from '../../db/client';
 import { users } from '../../db/schema';
 import { eq } from 'drizzle-orm';
